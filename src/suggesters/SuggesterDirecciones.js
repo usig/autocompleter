@@ -51,12 +51,8 @@ export default class SuggesterDirecciones extends Suggester {
    * @param {Integer} maxSuggestions (optional) Maximo numero de sugerencias a devolver
    */
   getSuggestions(text, callback, maxSuggestions) {
-    if (this.options.debug)
-      console.log("usig.SuggesterDirecciones.getSuggestions('" + text + "')");
-    var maxSug =
-      maxSuggestions != undefined
-        ? maxSuggestions
-        : this.options.maxSuggestions;
+    if (this.options.debug) console.log("usig.SuggesterDirecciones.getSuggestions('" + text + "')");
+    var maxSug = maxSuggestions != undefined ? maxSuggestions : this.options.maxSuggestions;
     try {
       let dirs = this.options.normalizadorDirecciones.normalizar(text, maxSug);
       dirs = dirs.map(d => {
@@ -74,9 +70,7 @@ export default class SuggesterDirecciones extends Suggester {
     } catch (error) {
       if (this.options.ignorarTextoSobrante) {
         try {
-          let opciones = this.options.normalizadorDirecciones.buscarDireccion(
-            text
-          );
+          let opciones = this.options.normalizadorDirecciones.buscarDireccion(text);
           if (opciones !== false) {
             let dirs = [opciones.match];
             dirs.map(d => {
@@ -114,8 +108,7 @@ export default class SuggesterDirecciones extends Suggester {
    */
   ready() {
     return (
-      this.options.normalizadorDirecciones &&
-      this.options.normalizadorDirecciones.inicializado()
+      this.options.normalizadorDirecciones && this.options.normalizadorDirecciones.inicializado()
     );
   }
 

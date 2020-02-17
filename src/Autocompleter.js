@@ -32,8 +32,7 @@ const defaults = {
   ],
   debug: false,
   texts: {
-    nothingFound:
-      'No se hallaron resultados coincidentes con su b&uacute;squeda.'
+    nothingFound: 'No se hallaron resultados coincidentes con su b&uacute;squeda.'
   }
 };
 
@@ -48,8 +47,7 @@ function emptyCallback() {
 function abort() {
   this.suggesters.forEach(suggester => {
     if (suggester.inputTimer) {
-      if (this.options.debug)
-        console.log('aborting suggester ' + suggester.name);
+      if (this.options.debug) console.log('aborting suggester ' + suggester.name);
       clearTimeout(suggester.inputTimer);
       suggester.status = DONE;
     }
@@ -65,15 +63,9 @@ function suggest(sugObj, str) {
   let sugOpts = sugObj.options;
   onServerRequest.bind(this)(suggester.name);
   if (this.options.debug)
-    console.log(
-      'Starting suggestions fetch. Suggesters ready?: ' + this.isInitialized()
-    );
+    console.log('Starting suggestions fetch. Suggesters ready?: ' + this.isInitialized());
 
-  suggester.getSuggestions(
-    str,
-    suggestCallback.bind(this),
-    sugOpts.maxSuggestions
-  );
+  suggester.getSuggestions(str, suggestCallback.bind(this), sugOpts.maxSuggestions);
 }
 
 function suggestCallback(results, inputStr, suggesterName) {
@@ -89,9 +81,7 @@ function suggestCallback(results, inputStr, suggesterName) {
         });
       } else if (results instanceof Array) {
         // We only want the maximum amount of suggestions set in the options
-        this.suggestions = this.suggestions
-          .concat(results)
-          .slice(0, this.options.maxSuggestions);
+        this.suggestions = this.suggestions.concat(results).slice(0, this.options.maxSuggestions);
 
         if (this.options.flushTimeout > 0) {
           this.bufferResults(results, this.appendResults);
@@ -110,10 +100,7 @@ function suggestCallback(results, inputStr, suggesterName) {
 }
 //Check if all the suggesters are in done state
 function checkForCompleteSuggestions() {
-  if (
-    this.suggesters.filter(s => s.status === DONE).length ===
-    this.suggesters.length
-  )
+  if (this.suggesters.filter(s => s.status === DONE).length === this.suggesters.length)
     this.onCompleteSuggestions(this.suggestions, this.appendResults);
 }
 
@@ -126,10 +113,7 @@ function onAbort(suggesterName) {
     this.numPendingRequests--;
   }
   if (this.options.debug)
-    console.log(
-      'usig.AutoCompleter.onAbort. Num Pending Requests: ' +
-        this.numPendingRequests
-    );
+    console.log('usig.AutoCompleter.onAbort. Num Pending Requests: ' + this.numPendingRequests);
   if (this.options.debug) console.log(this.pendingRequests);
 }
 
@@ -142,8 +126,7 @@ function onServerRequest(suggesterName) {
   this.suggesters.filter(s => s.name === suggesterName)[0].status = PENDING;
   if (this.options.debug)
     console.log(
-      'usig.AutoCompleter.onServerRequest. Num Pending Requests: ' +
-        this.numPendingRequests
+      'usig.AutoCompleter.onServerRequest. Num Pending Requests: ' + this.numPendingRequests
     );
   if (this.options.debug) console.log(this.pendingRequests);
   if (typeof this.options.afterServerRequest == 'function') {
@@ -164,14 +147,10 @@ function onServerResponse(suggesterName) {
   }
   if (this.options.debug)
     console.log(
-      'usig.AutoCompleter.onServerResponse. Num Pending Requests: ' +
-        this.numPendingRequests
+      'usig.AutoCompleter.onServerResponse. Num Pending Requests: ' + this.numPendingRequests
     );
   if (this.options.debug) console.log(this.pendingRequests);
-  if (
-    typeof this.options.afterServerResponse === 'function' &&
-    this.numPendingRequests === 0
-  ) {
+  if (typeof this.options.afterServerResponse === 'function' && this.numPendingRequests === 0) {
     this.options.afterServerResponse();
   }
   this.onUpdate(this.getGlobalState());
@@ -199,15 +178,9 @@ class Autocompleter {
       this.onCompleteSuggestions = callbacks.onCompleteSuggestions
         ? callbacks.onCompleteSuggestions
         : emptyCallback.bind(this);
-      this.onUpdate = callbacks.onUpdate
-        ? callbacks.onUpdate
-        : emptyCallback.bind(this);
-      this.onError = callbacks.onError
-        ? callbacks.onError
-        : emptyCallback.bind(this);
-      this.onMessage = callbacks.onMessage
-        ? callbacks.onMessage
-        : emptyCallback.bind(this);
+      this.onUpdate = callbacks.onUpdate ? callbacks.onUpdate : emptyCallback.bind(this);
+      this.onError = callbacks.onError ? callbacks.onError : emptyCallback.bind(this);
+      this.onMessage = callbacks.onMessage ? callbacks.onMessage : emptyCallback.bind(this);
       this.onBufferResults = callbacks.onBufferResults
         ? callbacks.onBufferResults
         : emptyCallback.bind(this);
@@ -242,15 +215,9 @@ class Autocompleter {
       this.onCompleteSuggestions = callbacks.onCompleteSuggestions
         ? callbacks.onCompleteSuggestions
         : emptyCallback.bind(this);
-      this.onUpdate = callbacks.onUpdate
-        ? callbacks.onUpdate
-        : emptyCallback.bind(this);
-      this.onError = callbacks.onError
-        ? callbacks.onError
-        : emptyCallback.bind(this);
-      this.onMessage = callbacks.onMessage
-        ? callbacks.onMessage
-        : emptyCallback.bind(this);
+      this.onUpdate = callbacks.onUpdate ? callbacks.onUpdate : emptyCallback.bind(this);
+      this.onError = callbacks.onError ? callbacks.onError : emptyCallback.bind(this);
+      this.onMessage = callbacks.onMessage ? callbacks.onMessage : emptyCallback.bind(this);
       this.onBufferResults = callbacks.onBufferResults
         ? callbacks.onBufferResults
         : emptyCallback.bind(this);
@@ -276,8 +243,7 @@ class Autocompleter {
             callejero: options.callejero
           });
         } catch (e) {
-          if (this.options.debug)
-            console.log('ERROR: Suggester: ' + name + ' creation failed.');
+          if (this.options.debug) console.log('ERROR: Suggester: ' + name + ' creation failed.');
           return false;
         }
       } else {
@@ -304,22 +270,17 @@ class Autocompleter {
       sgObj.setOptions(opt);
       this.suggesters.push(sgObj);
     } else {
-      if (this.options.debug)
-        console.log('Se intento agregar dos suggesters con el mismo nombre.');
+      if (this.options.debug) console.log('Se intento agregar dos suggesters con el mismo nombre.');
     }
   }
   createSuggesterByName(name, opts) {
-    const suggester = this.registeredSuggesters.filter(
-      suggester => suggester.name === name
-    )[0];
+    const suggester = this.registeredSuggesters.filter(suggester => suggester.name === name)[0];
     if (suggester) return new suggester.class(name, opts);
     throw 'no se encontro';
   }
   removeSuggester(suggester) {
     const name = typeof suggester === 'string' ? suggester : suggester.name;
-    this.suggesters = this.suggesters.filter(
-      suggester => suggester.name !== name
-    );
+    this.suggesters = this.suggesters.filter(suggester => suggester.name !== name);
     delete this.suggestersByName[name];
   }
   updateSuggestions(newValue) {
@@ -357,19 +318,14 @@ class Autocompleter {
       this.appendBufferedResults = appendResults;
       this.suggestions = this.bufferedResults;
       const t = this;
-      this.flushTimer = setTimeout(
-        () => bufferCallback.bind(t)(),
-        this.options.flushTimeout
-      );
+      this.flushTimer = setTimeout(() => bufferCallback.bind(t)(), this.options.flushTimeout);
     }
   }
 
   showResults() {
     if (this.options.debug)
       console.log(
-        'Flushing buffered results... (' +
-          (appendBufferedResults ? 'append' : 'replace') +
-          ')'
+        'Flushing buffered results... (' + (appendBufferedResults ? 'append' : 'replace') + ')'
       );
     if (field.value != '' && bufferedResults.length > 0) {
       view.show(bufferedResults, appendBufferedResults);
@@ -393,8 +349,7 @@ class Autocompleter {
       }),
       suggestions: this.suggestions,
       pendingRequests: this.numPendingRequests,
-      waitingSuggesters: this.suggesters.filter(s => s.status === INPUT_WAIT)
-        .length
+      waitingSuggesters: this.suggesters.filter(s => s.status === INPUT_WAIT).length
     };
     return this.globalState;
   }

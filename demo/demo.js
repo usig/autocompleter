@@ -5,7 +5,7 @@ let Autocompleter = require('../lib/Autocompleter.js').Autocompleter;
 let Suggester = require('../lib/Autocompleter.js').Suggester;
 let callejero = require('../callejero.json');
 class mySuggester extends Suggester {
-  constructor(name, options){
+  constructor(name, options) {
     super(name, options);
   }
 
@@ -17,7 +17,7 @@ class mySuggester extends Suggester {
    * @param {Integer} maxSuggestions (optional) Maximo numero de sugerencias a devolver
    */
   getSuggestions(text, callback, maxSuggestions) {
-    callback([{title: 'sug1'}, {title: 'sug2'}], text, this.name);
+    callback([{ title: 'sug1' }, { title: 'sug2' }], text, this.name);
   }
 
   /**
@@ -38,35 +38,33 @@ class mySuggester extends Suggester {
     // this.options.geoCoder.setOptions(opts);
   }
 }
-let callback = (results) => {
-  console.log ("All suggesters are done");
-  console.log (results);
+let callback = results => {
+  console.log('All suggesters are done');
+  console.log(results);
 };
 
-let updateCallback = (state) => {
-// console.log (state);
+let updateCallback = state => {
+  // console.log (state);
 };
-let errorCallback = (state) => {
-  console.log (state);
+let errorCallback = state => {
+  console.log(state);
 };
-let messageCallback = (state) => {
-  console.log (state);
+let messageCallback = state => {
+  console.log(state);
 };
-let autocompleter = new Autocompleter({onCompleteSuggestions: callback});
+let autocompleter = new Autocompleter({ onCompleteSuggestions: callback });
 // let autocompleter = new Autocompleter({onBufferResults: callback}, {flushTimeout: 2000});
-autocompleter.addSuggester("Direcciones", {inputPause: 400, callejero: callejero.callejero});
-autocompleter.addSuggester("DireccionesAMBA", {});
+autocompleter.addSuggester('Direcciones', { inputPause: 400, callejero: callejero.callejero });
+autocompleter.addSuggester('DireccionesAMBA', {});
 // autocompleter.removeSuggester("DireccionesAMBA");
 // autocompleter.removeSuggester("Lugares");
 // autocompleter.updateSuggestions("fede");
 
 setTimeout(() => {
-  console.log ("Listo despues de 2 segundos?: " + autocompleter.isInitialized());
-  autocompleter.updateSuggestions("fede 232323");
+  console.log('Listo despues de 2 segundos?: ' + autocompleter.isInitialized());
+  autocompleter.updateSuggestions('fede 232323');
   setTimeout(() => {
-    autocompleter.updateSuggestions("Pueyrredon, Honorio, Dr. Av. 1800");
+    autocompleter.updateSuggestions('Pueyrredon, Honorio, Dr. Av. 1800');
     // autocompleter.updateSuggestions("libertador 300");
   }, 500);
 }, 2000);
-
-

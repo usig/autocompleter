@@ -45,11 +45,7 @@ function mkRequest(data, address, serverDefaults) {
 export default class SuggesterDirecciones extends Suggester {
   constructor(name, options) {
     if (options !== undefined) {
-      options.searchOptions = Object.assign(
-        {},
-        defaults.searchOptions,
-        options.searchOptions
-      );
+      options.searchOptions = Object.assign({}, defaults.searchOptions, options.searchOptions);
     }
     let opts = Object.assign({}, defaults, options);
     super(name, opts);

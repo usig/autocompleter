@@ -36,11 +36,7 @@ function mkRequest(data, address, serverDefaults) {
 export default class SuggesterDireccionesAMBA extends Suggester {
   constructor(name, options) {
     if (options !== undefined) {
-      options.searchOptions = Object.assign(
-        {},
-        defaults.searchOptions,
-        options.searchOptions
-      );
+      options.searchOptions = Object.assign({}, defaults.searchOptions, options.searchOptions);
     }
     let opts = Object.assign({}, defaults, options);
     super(name, opts);
@@ -58,10 +54,7 @@ export default class SuggesterDireccionesAMBA extends Suggester {
    * @param {Integer} maxSuggestions (optional) Maximo numero de sugerencias a devolver
    */
   getSuggestions(text, callback, maxSuggestions) {
-    let maxSug =
-      maxSuggestions !== undefined
-        ? maxSuggestions
-        : this.options.maxSuggestions;
+    let maxSug = maxSuggestions !== undefined ? maxSuggestions : this.options.maxSuggestions;
     const midCallback = results => {
       results = results.map(d => {
         return {

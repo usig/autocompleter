@@ -9,11 +9,10 @@ const defaults = {
 };
 
 export default class Suggester {
-
-  constructor(name, options){
+  constructor(name, options) {
     this.name = name;
     this.options = Object.assign({}, defaults, options);
-    this.status = "done";
+    this.status = 'done';
     this.inputTimer = null;
   }
 
@@ -24,9 +23,9 @@ export default class Suggester {
    * @param {Function} callback Funcion que es llamada con la lista de sugerencias
    * @param {Integer} maxSuggestions (optional) Maximo numero de sugerencias a devolver
    */
-  getSuggestions(text, callback, maxSuggestions){
+  getSuggestions(text, callback, maxSuggestions) {
     throw new this.MethodNotImplemented();
-  };
+  }
 
   /**
    * Permite abortar la ultima consulta realizada
@@ -64,13 +63,13 @@ export default class Suggester {
     this.msg = 'Suggester: Method Not Implemented.';
     this.toString = function() {
       return this.msg;
-    }
+    };
   }
 
   GeoCodingTypeError() {
     this.msg = 'Suggester: Wrong object type for geocoding.';
     this.toString = function() {
       return this.msg;
-    }
+    };
   }
 }
