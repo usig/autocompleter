@@ -1,6 +1,7 @@
 import Suggester from './Suggester.js';
 import 'isomorphic-fetch';
 import URI from 'urijs';
+import { getLatLng } from '../utils.js';
 /**
  * @class SuggesterDirecciones
  * Implementa un suggester de direcciones usando el Normalizador de Direcciones.<br/>
