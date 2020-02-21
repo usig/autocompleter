@@ -1,5 +1,7 @@
 # Autocompleter
 
+**Warning:** Version 2.0.0 contains potentially breaking changes for frontend projects. Please refer to the [demo](./demo/usig-autocompleter-react-demo) to see how to implement the newest version.
+
 This autocompleter is a library which gives a list of suggestions given a certain text. This is done using a list of suggesters, which can be loaded dinamically, in case you don't want to use one of the defaults. A set of callbacks should be set so the autocompleter can call them after certain events.
 
 ## Features

@@ -4,7 +4,6 @@
 import { Normalizador } from '@usig-gcba/normalizador';
 import Suggester from './Suggester.js';
 
-import { getLatLng } from '../utils';
 import { usig_webservice_url } from '../config';
 /**
  * @class SuggesterDirecciones
@@ -72,11 +71,19 @@ export default class SuggesterDirecciones extends Suggester {
       dirs = dirs.map((d, i) => {
         d.descripcion = 'Ciudad Autónoma de Buenos Aires';
 
-        // this.getLatLng2(d).then(r => {
-        //   const { coordenadas } = r['direccionesNormalizadas'][i];
-
-        //   return (d.coordenadas = coordenadas);
-        // });
+        this.getLatLng2(d).then(r => {
+          if (r['direccionesNormalizadas'] && r['direccionesNormalizadas'][i]['coordenadas']) {
+            // Por alguna razón las coordenadas de CABA vienen como string
+            // Si en algún momento se arregla/cambia podemos obviar la parte de
+            // castear esos strings a floats.
+            d.coordenadas = {
+              x: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['x']),
+              y: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['y']),
+              srid: r['direccionesNormalizadas'][i]['coordenadas']['srid']
+            };
+            return d.coordenadas;
+          }
+        });
 
         return {
           title: d.nombre,

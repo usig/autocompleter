@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Autocompleter } from '@usig-gcba/autocompleter';
-import Geocoder from './utils/Geocoder';
 import './App.css';
 
 class App extends Component {
@@ -22,7 +21,8 @@ class App extends Component {
     this.setState({ input: text, showMap: false });
   };
 
-  handleClick = suggestion => {
+  handleClick = async suggestion => {
+    console.log('suggestion', suggestion);
     if (suggestion) {
       this.setState({ selectedSuggestion: suggestion });
       if (suggestion.type === 'CALLE') {
@@ -36,19 +36,14 @@ class App extends Component {
           suggestions: [],
           loading: true
         });
-        Geocoder.fetchGeolocation(suggestion)
-          .then(coords => {
-            this.setState({
-              showMap: true,
-              x: coords.x,
-              y: coords.y,
-              loading: false
-            });
-          })
-          .catch(err => {
-            console.error(err);
-            this.setState({ loading: false });
+        if (suggestion.type === 'DIRECCION') {
+          this.setState({
+            showMap: true,
+            loading: false,
+            x: suggestion.data.coordenadas.x,
+            y: suggestion.data.coordenadas.y
           });
+        }
       }
     }
   };
@@ -56,7 +51,7 @@ class App extends Component {
   componentDidMount() {
     // Opciones de config del autocomplete
     const options = { maxSuggestions: 10, debug: false };
-    const buscarDireccionesAmba = false;
+    const buscarDireccionesAmba = true;
 
     //Callbacks del autocomplete
     const suggestionsCallback = suggestions => {
@@ -105,6 +100,7 @@ class App extends Component {
           <span id="ejemplo">ej.: Callao y Corrientes, Florida 550, Teatro San Martín, etc.</span>
           {this.state.error ? this.state.error.message : null}
           {this.state.suggestions.map((suggestion, index) => {
+            console.log('suggestion', suggestion);
             const title = suggestion.alias || suggestion.title || suggestion.nombre;
             const subTitle = suggestion.subTitle ? suggestion.subTitle : suggestion.descripcion;
             return (
