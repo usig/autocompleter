@@ -3,6 +3,8 @@
  */
 import { Normalizador } from '@usig-gcba/normalizador';
 import Suggester from './Suggester.js';
+
+import { usig_webservice_url } from '../config';
 /**
  * @class SuggesterDirecciones
  * Implementa un suggester de direcciones usando el Normalizador de Direcciones.<br/>
@@ -43,6 +45,17 @@ export default class SuggesterDirecciones extends Suggester {
     this.options.normalizadorDirecciones = Normalizador;
   }
 
+  async getLatLng2(lugar) {
+    let response = await fetch(
+      `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre}&geocodificar=true&srid=4326`
+    );
+
+    if (response.status === 200) {
+      let json = await response.json();
+      return json;
+    }
+  }
+
   /**
    * Dado un string, realiza una busqueda de direcciones y llama al callback con las
    * opciones encontradas.
@@ -55,8 +68,23 @@ export default class SuggesterDirecciones extends Suggester {
     var maxSug = maxSuggestions != undefined ? maxSuggestions : this.options.maxSuggestions;
     try {
       let dirs = this.options.normalizadorDirecciones.normalizar(text, maxSug);
-      dirs = dirs.map(d => {
+      dirs = dirs.map((d, i) => {
         d.descripcion = 'Ciudad Autónoma de Buenos Aires';
+
+        this.getLatLng2(d).then(r => {
+          if (r['direccionesNormalizadas'] && r['direccionesNormalizadas'][i]['coordenadas']) {
+            // Por alguna razón las coordenadas de CABA vienen como string
+            // Si en algún momento se arregla/cambia podemos obviar la parte de
+            // castear esos strings a floats.
+            d.coordenadas = {
+              x: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['x']),
+              y: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['y']),
+              srid: r['direccionesNormalizadas'][i]['coordenadas']['srid']
+            };
+            return d.coordenadas;
+          }
+        });
+
         return {
           title: d.nombre,
           subTitle: d.descripcion,
