@@ -71,7 +71,7 @@ export default class SuggesterDirecciones extends Suggester {
       dirs = dirs.map((d, i) => {
         d.descripcion = 'Ciudad Autónoma de Buenos Aires';
 
-        this.getLatLng2(d).then(r => {
+        this.getLatLng2(d).then((r) => {
           if (r['direccionesNormalizadas'] && r['direccionesNormalizadas'][i]['coordenadas']) {
             // Por alguna razón las coordenadas de CABA vienen como string
             // Si en algún momento se arregla/cambia podemos obviar la parte de
@@ -101,7 +101,7 @@ export default class SuggesterDirecciones extends Suggester {
           let opciones = this.options.normalizadorDirecciones.buscarDireccion(text);
           if (opciones !== false) {
             let dirs = [opciones.match];
-            dirs.map(d => {
+            dirs.map((d) => {
               d.descripcion = 'Ciudad Autónoma de Buenos Aires';
               return {
                 title: d.name,

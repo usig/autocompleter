@@ -1,1 +1,1 @@
-export const usig_webservice_url = 'http://servicios.usig.buenosaires.gob.ar';
+export const usig_webservice_url = 'https://servicios.usig.buenosaires.gob.ar';
