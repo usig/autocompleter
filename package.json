@@ -1,6 +1,6 @@
 {
   "name": "@usig-gcba/autocompleter",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Librería que devuelve una lista de sugerencias dado un texto determinado.",
   "main": "lib/Autocompleter.min.js",
   "scripts": {
@@ -8,8 +8,7 @@
     "build:watch": "webpack --progress --colors --watch --env build",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "mocha --compilers js:babel-core/register --colors ./test/*.spec.js",
-    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js",
-    "postinstall": "node src/postinstall.js"
+    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",
