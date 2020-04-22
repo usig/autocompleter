@@ -24,7 +24,7 @@ import URI from 'urijs';
 
 const defaults = {
   serverTimeout: 30000,
-  server: 'https://epok.buenosaires.gob.ar/buscar',
+  server: 'https://epok.buenosaires.gob.ar/buscar/',
   maxRetries: 1,
   maxSuggestions: 10,
   searchOptions: {
@@ -41,7 +41,7 @@ const defaults = {
 
 function mkRequest(data, address, serverDefaults) {
   const url = URI(address).search(data);
-  return fetch(url.toString(), serverDefaults).then(resp => resp.json());
+  return fetch(url.toString(), serverDefaults).then((resp) => resp.json());
 }
 export default class SuggesterDirecciones extends Suggester {
   constructor(name, options) {
@@ -69,8 +69,8 @@ export default class SuggesterDirecciones extends Suggester {
       totalFull: this.options.searchOptions.totalFull
     };
     this.lastRequest = mkRequest(data, defaults.server, {}).then(
-      res => {
-        const results = res.instancias.map(d => {
+      (res) => {
+        const results = res.instancias.map((d) => {
           return {
             title: d.nombre,
             subTitle: d.clase,
@@ -82,7 +82,7 @@ export default class SuggesterDirecciones extends Suggester {
         });
         callback(results, text, this.name);
       },
-      err => callback(err, text, this.name)
+      (err) => callback(err, text, this.name)
     );
   }
 
