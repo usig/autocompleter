@@ -1,6 +1,7 @@
 import SuggesterDirecciones from 'suggesters/SuggesterDirecciones.js';
 import SuggesterLugares from 'suggesters/SuggesterLugares.js';
 import SuggesterDireccionesAMBA from 'suggesters/SuggesterDireccionesAMBA.js';
+import SuggesterDeficitHabitacional from 'suggesters/SuggesterDeficitHabitacional.js';
 import { DONE, PENDING, INPUT_WAIT } from 'constants.js';
 import Suggester from 'suggesters/Suggester.js';
 import { Direccion } from '@usig-gcba/normalizador';
@@ -28,6 +29,11 @@ const defaults = {
       name: 'DireccionesAMBA',
       options: { inputPause: 500, minTextLength: 3 },
       class: SuggesterDireccionesAMBA
+    },
+    {
+      name: 'DeficitHabitacional',
+      options: { inputPause: 500, minTextLength: 3 },
+      class: SuggesterDeficitHabitacional
     }
   ],
   debug: false,

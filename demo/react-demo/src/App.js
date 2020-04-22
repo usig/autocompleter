@@ -81,6 +81,7 @@ class App extends Component {
 
     autocompleter.addSuggester('Direcciones', { inputPause: 250 });
     autocompleter.addSuggester('Lugares');
+    autocompleter.addSuggester('SuggesterDeficitHabitacional');
     if (buscarDireccionesAmba) autocompleter.addSuggester('DireccionesAMBA');
 
     this.setState({ autocompleter: autocompleter, suggestions: [] });
