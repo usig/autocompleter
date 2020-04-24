@@ -72,7 +72,7 @@ export default class SuggesterDirecciones extends Suggester {
         d.descripcion = 'Ciudad Autónoma de Buenos Aires';
 
         this.getLatLng2(d).then((r) => {
-          if (r['direccionesNormalizadas'] && r['direccionesNormalizadas'][i]['coordenadas']) {
+          if (r['direccionesNormalizadas'] && r['direccionesNormalizadas'][i] && r['direccionesNormalizadas'][i]['coordenadas']) {
             // Por alguna razón las coordenadas de CABA vienen como string
             // Si en algún momento se arregla/cambia podemos obviar la parte de
             // castear esos strings a floats.

@@ -40,9 +40,8 @@ export default class SuggesterDeficitHabitacional extends Suggester {
               title: d.nombre,
               subTitle: d.clase,
               type: d.type,
-              category: d.clase,
-              idEpok: d.id,
-              suggesterName: this.name
+              suggesterName: this.name,
+              data: d
             };
           });
           callback(results, text, this.name);
