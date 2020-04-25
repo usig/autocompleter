@@ -15,14 +15,13 @@ class App extends Component {
     selectedSuggestion: null
   };
 
-  handleInputChange = event => {
+  handleInputChange = (event) => {
     const text = event.target.value;
     this.state.autocompleter.updateSuggestions(text);
     this.setState({ input: text, showMap: false });
   };
 
-  handleClick = async suggestion => {
-    console.log('suggestion', suggestion);
+  handleClick = async (suggestion) => {
     if (suggestion) {
       this.setState({ selectedSuggestion: suggestion });
       if (suggestion.type === 'CALLE') {
@@ -54,11 +53,12 @@ class App extends Component {
     const buscarDireccionesAmba = true;
 
     //Callbacks del autocomplete
-    const suggestionsCallback = suggestions => {
+    const suggestionsCallback = (suggestions) => {
+      console.log('suggestions', suggestions);
       this.setState({ suggestions: suggestions });
     };
 
-    const completeSuggestionsCallback = suggestions => {
+    const completeSuggestionsCallback = (suggestions) => {
       if (suggestions.length === 0) {
         this.setState({ suggestions: [] });
       } else {
@@ -66,7 +66,7 @@ class App extends Component {
       }
     };
 
-    const errorCallback = error => {
+    const errorCallback = (error) => {
       this.setState({ error: error });
     };
 
@@ -100,7 +100,6 @@ class App extends Component {
           <span id="ejemplo">ej.: Callao y Corrientes, Florida 550, Teatro San Martín, etc.</span>
           {this.state.error ? this.state.error.message : null}
           {this.state.suggestions.map((suggestion, index) => {
-            console.log('suggestion', suggestion);
             const title = suggestion.alias || suggestion.title || suggestion.nombre;
             const subTitle = suggestion.subTitle ? suggestion.subTitle : suggestion.descripcion;
             return (
