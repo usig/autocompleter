@@ -1,0 +1,23 @@
+<input
+  [(ngModel)]="inputValue"
+  placeholder="Búsqueda..."
+  (input)="inputChangeHandler($event.target.value)"
+/>
+
+<div *ngIf="suggestions">
+  <div
+    class="sugerencia"
+    *ngFor="let suggestion of suggestions"
+    (click)="selectSuggestion(suggestion)"
+  >
+    <div class="titulo-sugerencia">{{ suggestion.title }}</div>
+    <div class="clase">{{ suggestion.subTitle }}</div>
+  </div>
+</div>
+<div
+  *ngIf="selectedSuggestionJSON"
+  style="z-index: 0; display: 'inline-block'; max-width: '35vw';"
+>
+  Response:
+  <pre>{{ selectedSuggestionJSON }}</pre>
+</div>

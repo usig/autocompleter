@@ -45,6 +45,10 @@ export default class SuggesterDirecciones extends Suggester {
     this.options.normalizadorDirecciones = Normalizador;
   }
 
+  // Esta es la misma función que se usa en SuggesterDireccionesAMBA pero con
+  // la url cambiada, idealmente se podríá extraer a un archivo tipo utils
+  // y cambiarla para que dependiendo de si la dirección es CABA o AMBA
+  // agregue la localidad a la búsqueda o no.
   async getLatLng2(lugar) {
     let response = await fetch(
       `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre}&geocodificar=true&srid=4326`
@@ -72,7 +76,11 @@ export default class SuggesterDirecciones extends Suggester {
         d.descripcion = 'Ciudad Autónoma de Buenos Aires';
 
         this.getLatLng2(d).then((r) => {
-          if (r['direccionesNormalizadas'] && r['direccionesNormalizadas'][i] && r['direccionesNormalizadas'][i]['coordenadas']) {
+          if (
+            r['direccionesNormalizadas'] &&
+            r['direccionesNormalizadas'][i] &&
+            r['direccionesNormalizadas'][i]['coordenadas']
+          ) {
             // Por alguna razón las coordenadas de CABA vienen como string
             // Si en algún momento se arregla/cambia podemos obviar la parte de
             // castear esos strings a floats.

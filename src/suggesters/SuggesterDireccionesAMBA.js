@@ -1,8 +1,11 @@
 import Suggester from './Suggester.js';
 import { NormalizadorAMBA } from '@usig-gcba/normalizador';
 import 'isomorphic-fetch';
-import URI from 'urijs';
+
+import { usig_webservice_url } from '../config';
+
 /**
+ *
  * @class SuggesterDirecciones
  * Implementa un suggester de direcciones usando el Normalizador de Direcciones.<br/>
  * Requiere: jQuery-1.3.2+, jquery.class, usig.Suggester, Normalizador de Direcciones 1.4+, GeoCoder<br/>
@@ -29,10 +32,6 @@ const defaults = {
   maxSuggestions: 10
 };
 
-function mkRequest(data, address, serverDefaults) {
-  const url = URI(address).search(data);
-  return fetch(url.toString(), serverDefaults).then(resp => resp.json());
-}
 export default class SuggesterDireccionesAMBA extends Suggester {
   constructor(name, options) {
     if (options !== undefined) {
@@ -46,6 +45,20 @@ export default class SuggesterDireccionesAMBA extends Suggester {
     this.lastRequest = null;
   }
 
+  // Esta es la misma función que se usa en SuggesterDirecciones pero con
+  // la url cambiada, idealmente se podríá extraer a un archivo tipo utils
+  // y cambiarla para que dependiendo de si la dirección es CABA o AMBA
+  // agregue la localidad a la búsqueda o no.
+  async getLatLng2(lugar) {
+    let response = await fetch(
+      `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre}, ${lugar.calle.nombre_localidad}&geocodificar=true&srid=4326`
+    );
+    if (response.status === 200) {
+      let json = await response.json();
+      return json;
+    }
+  }
+
   /**
    * Dado un string, realiza una busqueda de direcciones y llama al callback con las
    * opciones encontradas.
@@ -55,8 +68,25 @@ export default class SuggesterDireccionesAMBA extends Suggester {
    */
   getSuggestions(text, callback, maxSuggestions) {
     let maxSug = maxSuggestions !== undefined ? maxSuggestions : this.options.maxSuggestions;
-    const midCallback = results => {
-      results = results.map(d => {
+    const midCallback = (results) => {
+      results = results.map((d, i) => {
+        if (d.tipo === 'DIRECCION') {
+          this.getLatLng2(d).then((r) => {
+            if (
+              r['direccionesNormalizadas'] &&
+              r['direccionesNormalizadas'][i] &&
+              r['direccionesNormalizadas'][i]['coordenadas']
+            ) {
+              d.coordenadas = {
+                x: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['x']),
+                y: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['y']),
+                srid: r['direccionesNormalizadas'][i]['coordenadas']['srid']
+              };
+              return d.coordenadas;
+            }
+          });
+        }
+
         return {
           title: d.nombre,
           subTitle: d.descripcion,
@@ -70,8 +100,8 @@ export default class SuggesterDireccionesAMBA extends Suggester {
     };
     this.options.normalizadorAMBA.buscar(
       text,
-      results => midCallback(results),
-      function(err) {
+      (results) => midCallback(results),
+      function (err) {
         console.log(err);
       },
       maxSug
