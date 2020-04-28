@@ -74,13 +74,13 @@ export default class SuggesterDireccionesAMBA extends Suggester {
           this.getLatLng2(d).then((r) => {
             if (
               r['direccionesNormalizadas'] &&
-              r['direccionesNormalizadas'][i] &&
-              r['direccionesNormalizadas'][i]['coordenadas']
+              r['direccionesNormalizadas'][0] &&
+              r['direccionesNormalizadas'][0]['coordenadas']
             ) {
               d.coordenadas = {
-                x: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['x']),
-                y: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['y']),
-                srid: r['direccionesNormalizadas'][i]['coordenadas']['srid']
+                x: parseFloat(r['direccionesNormalizadas'][0]['coordenadas']['x']),
+                y: parseFloat(r['direccionesNormalizadas'][0]['coordenadas']['y']),
+                srid: r['direccionesNormalizadas'][0]['coordenadas']['srid']
               };
               return d.coordenadas;
             }
