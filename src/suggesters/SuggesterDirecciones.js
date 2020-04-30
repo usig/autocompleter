@@ -45,6 +45,10 @@ export default class SuggesterDirecciones extends Suggester {
     this.options.normalizadorDirecciones = Normalizador;
   }
 
+  // Esta es la misma función que se usa en SuggesterDireccionesAMBA pero con
+  // la url cambiada, idealmente se podríá extraer a un archivo tipo utils
+  // y cambiarla para que dependiendo de si la dirección es CABA o AMBA
+  // agregue la localidad a la búsqueda o no.
   async getLatLng2(lugar) {
     let response = await fetch(
       `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre}&geocodificar=true&srid=4326`
@@ -71,15 +75,19 @@ export default class SuggesterDirecciones extends Suggester {
       dirs = dirs.map((d, i) => {
         d.descripcion = 'Ciudad Autónoma de Buenos Aires';
 
-        this.getLatLng2(d).then(r => {
-          if (r['direccionesNormalizadas'] && r['direccionesNormalizadas'][i]['coordenadas']) {
+        this.getLatLng2(d).then((r) => {
+          if (
+            r['direccionesNormalizadas'] &&
+            r['direccionesNormalizadas'][0] &&
+            r['direccionesNormalizadas'][0]['coordenadas']
+          ) {
             // Por alguna razón las coordenadas de CABA vienen como string
             // Si en algún momento se arregla/cambia podemos obviar la parte de
             // castear esos strings a floats.
             d.coordenadas = {
-              x: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['x']),
-              y: parseFloat(r['direccionesNormalizadas'][i]['coordenadas']['y']),
-              srid: r['direccionesNormalizadas'][i]['coordenadas']['srid']
+              x: parseFloat(r['direccionesNormalizadas'][0]['coordenadas']['x']),
+              y: parseFloat(r['direccionesNormalizadas'][0]['coordenadas']['y']),
+              srid: r['direccionesNormalizadas'][0]['coordenadas']['srid']
             };
             return d.coordenadas;
           }
@@ -101,7 +109,7 @@ export default class SuggesterDirecciones extends Suggester {
           let opciones = this.options.normalizadorDirecciones.buscarDireccion(text);
           if (opciones !== false) {
             let dirs = [opciones.match];
-            dirs.map(d => {
+            dirs.map((d) => {
               d.descripcion = 'Ciudad Autónoma de Buenos Aires';
               return {
                 title: d.name,

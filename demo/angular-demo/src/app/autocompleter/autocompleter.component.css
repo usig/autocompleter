@@ -1,0 +1,32 @@
+.sugerencia {
+  position: relative;
+  display: block;
+  padding: 12px 16px 0 0;
+  margin: 0;
+  color: #666;
+  text-decoration: none;
+  padding-left: 5px;
+}
+
+.sugerencia:hover {
+  background-color: rgb(245, 240, 240);
+}
+
+.sugerencia .clase {
+  display: block;
+  font-size: 0.9em;
+  color: #a6a6a6;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: calc(100vw - 70px);
+}
+.sugerencia > .titulo-sugerencia {
+  font-size: 1.1em;
+  font-weight: normal;
+  line-height: 1.4;
+  white-space: nowrap;
+  max-width: calc(100vw - 70px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

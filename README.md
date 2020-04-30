@@ -14,7 +14,9 @@ This autocompleter is a library which gives a list of suggestions given a certai
 
 ## Demos
 
-A simple [create-react-app](https://www.npmjs.com/package/create-react-app) can be found in [demo/usig-autocompleter-react-demo](./demo/usig-autocompleter-react-demo) with an example showing how the module can be used in a React environment.
+A simple [create-react-app](https://www.npmjs.com/package/create-react-app) can be found in [demo/react-demo](./demo/react-demo) with an example showing how the module can be used in a React environment.
+
+Also, an [Angular CLI](https://github.com/angular/angular-cli) app can be found in [demo/angular-demo](./demo/angular-demo) showing integration in this framework.
 
 ## Getting started
 
@@ -119,6 +121,8 @@ This suggester looks for places inside the City of Buenos Aires (airports, museu
 
 #### Adding a custom suggester
 
+You can see an example of a suggester that can be used as a template [here](./src/suggesters/SuggesterDemo.js)
+
 Custom suggesters can be added via de `addSuggester` function. This function can take either a `String` or an `Object` as parameters.
 
 - Parameters:
@@ -142,3 +146,7 @@ class MySuggester extends Suggester {
   }
 }
 ```
+
+## Troubleshooting
+
+If you are trying to implement Autocompleter in an Angular project, you will have to install `@babel/polyfill` and import it at your app.component.ts file as can be seen in the [angular demo](./demo/angular-demo).
