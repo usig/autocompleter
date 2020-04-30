@@ -80,11 +80,12 @@ const autocompleter = new Autocompleter(
 - By default, the autocompleter initializes empty. This method adds a suggester for the autocompleter to use when updating suggestions.
 - Parameters:
   - suggesterName: `String` name of the suggester.
-- The name must be a valid suggester name. By default, 3 suggesters are registered in the autocompleter:
+- The name must be a valid suggester name. By default, 4 suggesters are registered in the autocompleter:
 
   - "Direcciones"
   - "DireccionesAmba"
   - "Lugares"
+  - "DeficitHabitacional"
 
 #### updateSuggestions(text)
 
