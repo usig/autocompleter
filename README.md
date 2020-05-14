@@ -86,6 +86,7 @@ const autocompleter = new Autocompleter(
   - "DireccionesAmba"
   - "Lugares"
   - "DeficitHabitacional"
+  - "Catastro"
 
 #### updateSuggestions(text)
 
