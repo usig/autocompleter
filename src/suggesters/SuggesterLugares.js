@@ -1,9 +1,10 @@
 import Suggester from './Suggester.js';
 import 'isomorphic-fetch';
 import URI from 'urijs';
+import { lugares_webservice_url } from '../config';
 
 /**
- * @class SuggesterDirecciones
+ * @class SuggesterLugares
  * Implementa un suggester de direcciones usando el Normalizador de Direcciones.<br/>
  * Requiere: jQuery-1.3.2+, jquery.class, usig.Suggester, Normalizador de Direcciones 1.4+, GeoCoder<br/>
  * @namespace usig
@@ -43,7 +44,8 @@ function mkRequest(data, address, serverDefaults) {
   const url = URI(address).search(data);
   return fetch(url.toString(), serverDefaults).then((resp) => resp.json());
 }
-export default class SuggesterDirecciones extends Suggester {
+
+export default class SuggesterLugares extends Suggester {
   constructor(name, options) {
     if (options !== undefined) {
       options.searchOptions = Object.assign({}, defaults.searchOptions, options.searchOptions);
@@ -51,6 +53,17 @@ export default class SuggesterDirecciones extends Suggester {
     let opts = Object.assign({}, defaults, options);
     super(name, opts);
     this.lastRequest = null;
+  }
+
+  async getLatLng2(lugar) {
+    let response = await fetch(
+      `${lugares_webservice_url}/?&id=${lugar.id}&geocodificar=true&srid=4326`
+    );
+
+    if (response.status === 200) {
+      let json = await response.json();
+      return json;
+    }
   }
 
   /**
@@ -69,15 +82,25 @@ export default class SuggesterDirecciones extends Suggester {
       totalFull: this.options.searchOptions.totalFull
     };
     this.lastRequest = mkRequest(data, defaults.server, {}).then(
-      (res) => {
+      res => {
         const results = res.instancias.map((d) => {
+          this.getLatLng2(d).then((r) => {
+            if ( r.ubicacion ) {
+              d.coordenadas = {
+                x: parseFloat(r.ubicacion.centroide.split('(', 2)[1]),
+                y: parseFloat(r.ubicacion.centroide.split(' ', 3)[2]),
+                srid: 4326
+              };
+              return d.coordenadas;
+            }
+          });
           return {
             title: d.nombre,
             subTitle: d.clase,
             type: 'LUGAR',
-            category: d.clase,
             idEpok: d.id,
-            suggesterName: this.name
+            suggesterName: this.name,
+            data: d
           };
         });
         callback(results, text, this.name);
