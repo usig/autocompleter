@@ -1,10 +1,11 @@
 /**
  * Created by federuiz on 7/11/17.
  */
-import { Normalizador } from '@usig-gcba/normalizador';
 import Suggester from './Suggester.js';
-
+import { Normalizador } from '@usig-gcba/normalizador';
 import { usig_webservice_url } from '../config';
+import { catastro_webservice_url } from '../config';
+
 /**
  * @class SuggesterDirecciones
  * Implementa un suggester de direcciones usando el Normalizador de Direcciones.<br/>
@@ -60,6 +61,18 @@ export default class SuggesterDirecciones extends Suggester {
     }
   }
 
+  // Hay que indicarle al usuario que para obtener el smp, si o si tiene que idicarle una altura valida a la direccion.
+  async getLatLng3(lugar) {
+    let response = await fetch(
+      `${catastro_webservice_url}/parcela/?codigo_calle=${lugar.codigo || lugar.calle.codigo}&altura=${lugar.altura}&geocodificar=true&srid=4326`
+    );
+
+    if (response.status === 200) {
+      let json = await response.json();
+      return json;
+    }
+  }
+  
   /**
    * Dado un string, realiza una busqueda de direcciones y llama al callback con las
    * opciones encontradas.
@@ -92,7 +105,10 @@ export default class SuggesterDirecciones extends Suggester {
             return d.coordenadas;
           }
         });
-
+        this.getLatLng3(d).then((r) => {
+          if (r['smp']) d.smp = r['smp'];
+          return d.smp;
+        });
         return {
           title: d.nombre,
           subTitle: d.descripcion,

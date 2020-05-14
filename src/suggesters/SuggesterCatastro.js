@@ -1,10 +1,8 @@
 import Suggester from './Suggester.js';
 import 'isomorphic-fetch';
-import URI from 'urijs';
-import { lugares_webservice_url } from '../config';
 
 /**
- * @class SuggesterLugares
+ * @class SuggesterCatastro
  * Implementa un suggester de direcciones usando el Normalizador de Direcciones.<br/>
  * Requiere: jQuery-1.3.2+, jquery.class, usig.Suggester, Normalizador de Direcciones 1.4+, GeoCoder<br/>
  * @namespace usig
@@ -25,45 +23,19 @@ import { lugares_webservice_url } from '../config';
 
 const defaults = {
   serverTimeout: 30000,
-  server: 'https://epok.buenosaires.gob.ar/buscar/',
   maxRetries: 1,
-  maxSuggestions: 10,
-  searchOptions: {
-    start: 0,
-    limit: 20,
-    tipoBusqueda: 'ranking',
-    categoria: undefined,
-    clase: undefined,
-    bbox: false,
-    extent: undefined,
-    returnRawData: false
-  }
+  maxSuggestions: 10
 };
 
-function mkRequest(data, address, serverDefaults) {
-  const url = URI(address).search(data);
-  return fetch(url.toString(), serverDefaults).then((resp) => resp.json());
+function mkRequest(data) {
+  return fetch(`https://epok.buenosaires.gob.ar/catastro/smp/${data}`).then(resp => resp.json());
 }
 
-export default class SuggesterLugares extends Suggester {
+export default class SuggesterCatastro extends Suggester {
   constructor(name, options) {
-    if (options !== undefined) {
-      options.searchOptions = Object.assign({}, defaults.searchOptions, options.searchOptions);
-    }
     let opts = Object.assign({}, defaults, options);
     super(name, opts);
     this.lastRequest = null;
-  }
-
-  async getLatLng2(lugar) {
-    let response = await fetch(
-      `${lugares_webservice_url}/?&id=${lugar.id}&geocodificar=true&srid=4326`
-    );
-
-    if (response.status === 200) {
-      let json = await response.json();
-      return json;
-    }
   }
 
   /**
@@ -74,31 +46,18 @@ export default class SuggesterLugares extends Suggester {
    * @param {Integer} maxSuggestions (optional) Maximo numero de sugerencias a devolver
    */
   getSuggestions(text, callback, maxSuggestions) {
-    const data = {
-      start: this.options.searchOptions.start,
-      limit: this.options.searchOptions.limit,
-      texto: text,
-      tipo: this.options.searchOptions.tipoBusqueda,
-      totalFull: this.options.searchOptions.totalFull
-    };
+    let data = text.replace(/-/g, "/");
     this.lastRequest = mkRequest(data, defaults.server, {}).then(
       res => {
-        const results = res.instancias.map((d) => {
-          this.getLatLng2(d).then((r) => {
-            if ( r.ubicacion ) {
-              d.coordenadas = {
-                x: parseFloat(r.ubicacion.centroide.split('(', 2)[1]),
-                y: parseFloat(r.ubicacion.centroide.split(' ', 3)[2]),
-                srid: 4326
-              };
-              return d.coordenadas;
-            }
-          });
+        const results = res.datos.map((d) => {
+          if(data.split('/', 3)[2]){
+            d.coordenadas = {
+              x: parseFloat(d.centroide.split('(', 2)[1]),
+              y: parseFloat(d.centroide.split(' ', 3)[2]),
+              srid: 4326
+            };
+          }
           return {
-            title: d.nombre,
-            subTitle: d.clase,
-            type: 'LUGAR',
-            idEpok: d.id,
             suggesterName: this.name,
             data: d
           };
