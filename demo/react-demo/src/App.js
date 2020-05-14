@@ -81,7 +81,8 @@ class App extends Component {
 
     autocompleter.addSuggester('Direcciones', { inputPause: 250 });
     autocompleter.addSuggester('Lugares');
-    autocompleter.addSuggester('SuggesterDeficitHabitacional');
+    autocompleter.addSuggester('DeficitHabitacional');
+    autocompleter.addSuggester('Catastro');
     if (buscarDireccionesAmba) autocompleter.addSuggester('DireccionesAMBA');
 
     this.setState({ autocompleter: autocompleter, suggestions: [] });
@@ -101,7 +102,7 @@ class App extends Component {
           <span id="ejemplo">ej.: Callao y Corrientes, Florida 550, Teatro San Martín, etc.</span>
           {this.state.error ? this.state.error.message : null}
           {this.state.suggestions.map((suggestion, index) => {
-            const title = suggestion.alias || suggestion.title || suggestion.nombre;
+            const title = suggestion.alias || suggestion.title || suggestion.nombre || suggestion.data.smp || suggestion.data;
             const subTitle = suggestion.subTitle ? suggestion.subTitle : suggestion.descripcion;
             return (
               <div className="sugerencia" key={index} onClick={() => this.handleClick(suggestion)}>
