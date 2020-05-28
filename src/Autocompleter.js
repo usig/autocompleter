@@ -6,6 +6,7 @@ import SuggesterCatastro from 'suggesters/SuggesterCatastro.js';
 import { DONE, PENDING, INPUT_WAIT } from 'constants.js';
 import Suggester from 'suggesters/Suggester.js';
 import { Direccion } from '@usig-gcba/normalizador';
+import { usig_webservice_url } from './config';
 const defaults = {
   // Opciones para los suggesters
   inputPause: 200,
@@ -294,6 +295,37 @@ class Autocompleter {
     const name = typeof suggester === 'string' ? suggester : suggester.name;
     this.suggesters = this.suggesters.filter(suggester => suggester.name !== name);
     delete this.suggestersByName[name];
+  }
+  updateCoordenadas(suggestions){
+    //console.log(suggestions);
+    if(suggestions.suggesterName === 'Direcciones'){
+      let response = fetch(
+        `${usig_webservice_url}/normalizar/?direccion=${suggestions.data.nombre}&geocodificar=true&srid=4326`
+      ).then(r => r.json()).then(r => {
+        if (
+          r['direccionesNormalizadas'] &&
+          r['direccionesNormalizadas'][0] &&
+          r['direccionesNormalizadas'][0]['coordenadas']
+        ){
+          return r['direccionesNormalizadas'][0]['coordenadas']
+        }
+        return response;
+      });      
+    }else{
+      //let json = response.json();
+      let response = fetch(
+        `${usig_webservice_url}/normalizar/?direccion=${suggestions.data.nombre}, ${suggestions.data.calle.nombre_localidad}&geocodificar=true&srid=4326`
+      ).then(r => r.json()).then(r => {
+        if (
+          r['direccionesNormalizadas'] &&
+          r['direccionesNormalizadas'][0] &&
+          r['direccionesNormalizadas'][0]['coordenadas']
+        ){
+          return r['direccionesNormalizadas'][0]['coordenadas']
+        }
+        return response;
+      })            
+    }    
   }
   updateSuggestions(newValue) {
     this.currentText = newValue;

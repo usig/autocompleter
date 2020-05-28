@@ -22,6 +22,8 @@ class App extends Component {
   };
 
   handleClick = async (suggestion) => {
+    let coord = await this.state.autocompleter.updateCoordenadas(suggestion);
+    console.log(coord);
     if (suggestion) {
       this.setState({ selectedSuggestion: suggestion });
       if (suggestion.type === 'CALLE') {
