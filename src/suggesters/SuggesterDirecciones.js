@@ -54,19 +54,16 @@ export default class SuggesterDirecciones extends Suggester {
     let response = await fetch(
       `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre}&geocodificar=true&srid=4326`
     );
-
     if (response.status === 200) {
       let json = await response.json();
       return json;
     }
   }
 
-  // Hay que indicarle al usuario que para obtener el smp, si o si tiene que idicarle una altura valida a la direccion.
   async getLatLng3(lugar) {
     let response = await fetch(
       `${catastro_webservice_url}/parcela/?codigo_calle=${lugar.codigo || lugar.calle.codigo}&altura=${lugar.altura}&geocodificar=true&srid=4326`
     );
-
     if (response.status === 200) {
       let json = await response.json();
       return json;
@@ -85,9 +82,8 @@ export default class SuggesterDirecciones extends Suggester {
     var maxSug = maxSuggestions != undefined ? maxSuggestions : this.options.maxSuggestions;
     try {
       let dirs = this.options.normalizadorDirecciones.normalizar(text, maxSug);
-      dirs = dirs.map((d, i) => {
+      dirs = dirs.map((d) => {
         d.descripcion = 'Ciudad Autónoma de Buenos Aires';
-
         this.getLatLng2(d).then((r) => {
           if (
             r['direccionesNormalizadas'] &&
@@ -102,10 +98,12 @@ export default class SuggesterDirecciones extends Suggester {
               y: parseFloat(r['direccionesNormalizadas'][0]['coordenadas']['y']),
               srid: r['direccionesNormalizadas'][0]['coordenadas']['srid']
             };
+            console.log(d.coordenadas);
             return d.coordenadas;
           }
         });
         this.getLatLng3(d).then((r) => {
+          // Para que devuelva estos datos hay que indicarle una altura a la direccion
           if (r['smp']) d.smp = r['smp'];
           return d.smp;
         });
