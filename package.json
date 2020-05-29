@@ -1,6 +1,6 @@
 {
   "name": "@usig-gcba/autocompleter",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "description": "Librería que devuelve una lista de sugerencias dado un texto determinado.",
   "main": "lib/Autocompleter.min.js",
   "scripts": {
