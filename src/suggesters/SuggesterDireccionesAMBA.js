@@ -51,7 +51,7 @@ export default class SuggesterDireccionesAMBA extends Suggester {
   // agregue la localidad a la búsqueda o no.
   async getLatLng2(lugar) {
     let response = await fetch(
-      `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre}, ${lugar.calle.nombre_localidad}&geocodificar=true&srid=4326`
+      `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre}, ${lugar.descripcion.split(',', 2)[0]}&geocodificar=true&srid=4326`
     );
     if (response.status === 200) {
       let json = await response.json();
@@ -86,7 +86,6 @@ export default class SuggesterDireccionesAMBA extends Suggester {
             }
           });
         }
-
         return {
           title: d.nombre,
           subTitle: d.descripcion,

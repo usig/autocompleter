@@ -90,15 +90,11 @@ export default class SuggesterDirecciones extends Suggester {
             r['direccionesNormalizadas'][0] &&
             r['direccionesNormalizadas'][0]['coordenadas']
           ) {
-            // Por alguna razón las coordenadas de CABA vienen como string
-            // Si en algún momento se arregla/cambia podemos obviar la parte de
-            // castear esos strings a floats.
             d.coordenadas = {
               x: parseFloat(r['direccionesNormalizadas'][0]['coordenadas']['x']),
               y: parseFloat(r['direccionesNormalizadas'][0]['coordenadas']['y']),
               srid: r['direccionesNormalizadas'][0]['coordenadas']['srid']
             };
-            console.log(d.coordenadas);
             return d.coordenadas;
           }
         });
