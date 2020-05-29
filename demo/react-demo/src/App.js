@@ -21,9 +21,9 @@ class App extends Component {
     this.setState({ input: text, showMap: false });
   };
 
-  handleClick = async (suggestion) => {
+  handleClick = async suggestion => {
+    console.log('suggestion', suggestion);
     let coord = await this.state.autocompleter.updateCoordenadas(suggestion);
-    console.log(coord);
     if (suggestion) {
       this.setState({ selectedSuggestion: suggestion });
       if (suggestion.type === 'CALLE') {
@@ -41,8 +41,8 @@ class App extends Component {
           this.setState({
             showMap: true,
             loading: false,
-            x: suggestion.data.coordenadas.x,
-            y: suggestion.data.coordenadas.y
+            x: coord.x,
+            y: coord.y
           });
         }
       }
@@ -56,7 +56,6 @@ class App extends Component {
 
     //Callbacks del autocomplete
     const suggestionsCallback = (suggestions) => {
-      console.log('suggestions', suggestions);
       this.setState({ suggestions: suggestions });
     };
 

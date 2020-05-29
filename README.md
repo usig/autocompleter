@@ -95,6 +95,13 @@ const autocompleter = new Autocompleter(
 
   - text: `String` to be searched.
 
+#### updateCoordenadas(suggestions)
+
+- Calls the coordinates of an endpoint of normalized directions for CABA and AMBA suggestions.
+- Parameters:
+
+  - suggestions: `String` to be searched.
+
 #### removeSuggester(suggesterName)
 
 - Removes a suggester from the autocompleter. This suggester will still be a valid one, but the autocompleter won't take it into account when updating suggestions.
@@ -120,6 +127,14 @@ This suggester looks for directions inside AMBA.
 ##### Places of interest
 
 This suggester looks for places inside the City of Buenos Aires (airports, museums, parks, entertainment).
+
+##### Vulnerable Areas
+
+This suggester looks for vulnerable areas inside the City of Buenos Aires.
+
+##### Cadastre
+
+This suggester allows locating a coordinates from its smp, in format: seccion-manzana-parcela, inside the City of Buenos Aires.
 
 #### Adding a custom suggester
 

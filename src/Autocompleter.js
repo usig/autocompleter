@@ -297,7 +297,6 @@ class Autocompleter {
     delete this.suggestersByName[name];
   }
   updateCoordenadas(suggestions){
-    //console.log(suggestions);
     if(suggestions.suggesterName === 'Direcciones'){
       let response = fetch(
         `${usig_webservice_url}/normalizar/?direccion=${suggestions.data.nombre}&geocodificar=true&srid=4326`
@@ -309,12 +308,11 @@ class Autocompleter {
         ){
           return r['direccionesNormalizadas'][0]['coordenadas']
         }
-        return response;
-      });      
-    }else{
-      //let json = response.json();
+      });
+      return response;
+    }else if(suggestions.suggesterName === 'DireccionesAMBA'){
       let response = fetch(
-        `${usig_webservice_url}/normalizar/?direccion=${suggestions.data.nombre}, ${suggestions.data.calle.nombre_localidad}&geocodificar=true&srid=4326`
+        `${usig_webservice_url}/normalizar/?direccion=${suggestions.data.nombre}, ${suggestions.data.descripcion.split(',', 2)[0]}&geocodificar=true&srid=4326`
       ).then(r => r.json()).then(r => {
         if (
           r['direccionesNormalizadas'] &&
@@ -323,9 +321,9 @@ class Autocompleter {
         ){
           return r['direccionesNormalizadas'][0]['coordenadas']
         }
-        return response;
-      })            
-    }    
+      });
+      return response;           
+    }
   }
   updateSuggestions(newValue) {
     this.currentText = newValue;
