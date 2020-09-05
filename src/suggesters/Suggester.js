@@ -7,24 +7,52 @@ const defaults = {
   maxRetries: 5,
   maxSuggestions: 10
 };
-
+const suggestionsPromises = new Map()
 export default class Suggester {
   constructor(name, options) {
     this.name = name;
     this.options = Object.assign({}, defaults, options);
     this.status = 'done';
     this.inputTimer = null;
+    this.suggestionsPromises = suggestionsPromises
+  }
+
+  /**
+   * Retorna una array de promises del suggestion recibido como parámetro
+   * @param {Object} suggestion uno de los objetos retornado por getSuggestions
+   */
+  static getSuggestionPromises(suggestion) {
+    return suggestionsPromises.get(suggestion) || []
+  }
+  /**
+   * Este método deber ser 
+   * @param {*} suggestion 
+   * @param {*} promise 
+   */
+  addSuggestionPromise(suggestion, promise){
+    if(!suggestionsPromises.has(suggestion)){
+      suggestionsPromises.set(suggestion, [promise])
+    }else{
+      suggestionsPromises.get(suggestion).push(promise)
+    }
   }
 
   /**
    * Dado un string, realiza una busqueda de sugerencias y llama al callback con las
    * opciones encontradas.
+   * En algunos casos los objetos retornados tienen data incompleta que serán cargadas con posterioridad
+   * Si se desea esperar por esta carga puede hacer un Pomise.all del array retornado por getSuggestionPromises
    * @param {String} text Texto de input
    * @param {Function} callback Funcion que es llamada con la lista de sugerencias
    * @param {Integer} maxSuggestions (optional) Maximo numero de sugerencias a devolver
    */
   getSuggestions(text, callback, maxSuggestions) {
-    throw new this.MethodNotImplemented();
+    /*
+    * En algunos casos puede ser util hacer fetch de datos que serán utilizados con posterioridad
+    * en estos casos se pueden almacenar en SuggestionsPromises el objeto suggestion como key y un array de promises como su value
+    * El método getSuggestionPromises retorna este array de promises
+    */
+     throw new this.MethodNotImplemented();
   }
 
   /**

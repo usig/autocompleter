@@ -84,7 +84,17 @@ export default class SuggesterLugares extends Suggester {
     this.lastRequest = mkRequest(data, defaults.server, {}).then(
       res => {
         const results = res.instancias.map((d) => {
-          this.getLatLng2(d).then((r) => {
+          const suggestion = {
+            title: d.nombre,
+            subTitle: d.clase,
+            type: 'LUGAR',
+            idEpok: d.id,
+            suggesterName: this.name,
+            data: d
+          }
+          const latLng2 = this.getLatLng2(d)
+          this.addSuggestionPromise(suggestion, latLng2)
+          latLng2.then((r) => {
             if ( r.ubicacion ) {
               d.coordenadas = {
                 x: parseFloat(r.ubicacion.centroide.split('(', 2)[1]),
@@ -94,14 +104,7 @@ export default class SuggesterLugares extends Suggester {
               return d.coordenadas;
             }
           });
-          return {
-            title: d.nombre,
-            subTitle: d.clase,
-            type: 'LUGAR',
-            idEpok: d.id,
-            suggesterName: this.name,
-            data: d
-          };
+          return suggestion;
         });
         callback(results, text, this.name);
       },
