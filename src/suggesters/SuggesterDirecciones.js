@@ -84,7 +84,19 @@ export default class SuggesterDirecciones extends Suggester {
       let dirs = this.options.normalizadorDirecciones.normalizar(text, maxSug);
       dirs = dirs.map((d) => {
         d.descripcion = 'Ciudad Autónoma de Buenos Aires';
-        this.getLatLng2(d).then((r) => {
+        const suggestion = {
+          title: d.nombre,
+          subTitle: d.descripcion,
+          type: d.tipo,
+          category: d.type,
+          suggesterName: this.name,
+          data: d
+        }
+        const latLng2 = this.getLatLng2(d)
+        const latLng3 = this.getLatLng3(d)
+        this.addSuggestionPromise(suggestion, latLng2)
+        this.addSuggestionPromise(suggestion, latLng3)
+        latLng2.then((r) => {
           if (
             r['direccionesNormalizadas'] &&
             r['direccionesNormalizadas'][0] &&
@@ -98,19 +110,12 @@ export default class SuggesterDirecciones extends Suggester {
             return d.coordenadas;
           }
         });
-        this.getLatLng3(d).then((r) => {
+        latLng3.then((r) => {
           // Para que devuelva estos datos hay que indicarle una altura a la direccion
           if (r['smp']) d.smp = r['smp'];
           return d.smp;
         });
-        return {
-          title: d.nombre,
-          subTitle: d.descripcion,
-          type: d.tipo,
-          category: d.type,
-          suggesterName: this.name,
-          data: d
-        };
+        return suggestion;
       });
       callback(dirs, text, this.name);
     } catch (error) {

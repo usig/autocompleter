@@ -102,6 +102,11 @@ const autocompleter = new Autocompleter(
 
   - suggestions: `String` to be searched.
 
+#### getSuggestionPromises(suggestion)
+
+- Some suggestions getted in the callback *onSuggestions* are affected by promises, these promises can be obtained using this method.
+
+
 #### removeSuggester(suggesterName)
 
 - Removes a suggester from the autocompleter. This suggester will still be a valid one, but the autocompleter won't take it into account when updating suggestions.

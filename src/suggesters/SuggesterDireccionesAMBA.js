@@ -70,8 +70,18 @@ export default class SuggesterDireccionesAMBA extends Suggester {
     let maxSug = maxSuggestions !== undefined ? maxSuggestions : this.options.maxSuggestions;
     const midCallback = (results) => {
       results = results.map((d, i) => {
+        const suggestion = {
+          title: d.nombre,
+          subTitle: d.descripcion,
+          type: d.tipo,
+          category: d.tipo,
+          suggesterName: this.name,
+          data: d
+        }
         if (d.tipo === 'DIRECCION') {
-          this.getLatLng2(d).then((r) => {
+          const latLng2 = this.getLatLng2(d)
+          this.addSuggestionPromise(suggestion, latLng2)
+          latLng2.then((r) => {
             if (
               r['direccionesNormalizadas'] &&
               r['direccionesNormalizadas'][0] &&
@@ -86,14 +96,7 @@ export default class SuggesterDireccionesAMBA extends Suggester {
             }
           });
         }
-        return {
-          title: d.nombre,
-          subTitle: d.descripcion,
-          type: d.tipo,
-          category: d.tipo,
-          suggesterName: this.name,
-          data: d
-        };
+        return suggestion;
       });
       callback(results, text, this.name);
     };

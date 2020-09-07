@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Autocompleter } from '@usig-gcba/autocompleter';
+import { Autocompleter, Suggester } from '@usig-gcba/autocompleter';
 import './App.css';
 
 class App extends Component {
@@ -12,7 +12,8 @@ class App extends Component {
     input: '',
     error: null,
     suggestions: [],
-    selectedSuggestion: null
+    selectedSuggestion: null,
+    selectedSuggestionStatus: ''
   };
 
   handleInputChange = (event) => {
@@ -22,10 +23,21 @@ class App extends Component {
   };
 
   handleClick = async suggestion => {
-    console.log('suggestion', suggestion);
-    let coord = await this.state.autocompleter.updateCoordenadas(suggestion);
+    this.setState({ selectedSuggestionStatus: 'Incompleto' })
     if (suggestion) {
-      this.setState({ selectedSuggestion: suggestion });
+      Promise.all(Suggester.getSuggestionPromises(suggestion))
+        .then(_ => {
+          this.setState({ selectedSuggestionStatus: 'Completo' })
+          if (suggestion.type === 'DIRECCION') {
+            this.setState({
+              showMap: true,
+              loading: false,
+              x: suggestion.data.coordenadas.x,
+              y: suggestion.data.coordenadas.y,
+            });
+          }
+        })
+        this.setState({ selectedSuggestion: suggestion });
       if (suggestion.type === 'CALLE') {
         this.setState({
           suggestions: [],
@@ -37,14 +49,6 @@ class App extends Component {
           suggestions: [],
           loading: true
         });
-        if (suggestion.type === 'DIRECCION') {
-          this.setState({
-            showMap: true,
-            loading: false,
-            x: coord.x,
-            y: coord.y
-          });
-        }
       }
     }
   };
@@ -122,6 +126,7 @@ class App extends Component {
           })}
           {this.state.selectedSuggestion ? (
             <div style={{ zIndex: 0, display: 'inline-block', maxWidth: '35 vw' }}>
+              <p>Suggestion estado: {this.state.selectedSuggestionStatus}</p>
               <pre>{JSON.stringify(this.state.selectedSuggestion, null, 2)}</pre>
             </div>
           ) : null}
