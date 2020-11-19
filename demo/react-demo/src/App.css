@@ -1,16 +1,26 @@
+body {
+  background-color: white;
+  margin: auto;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  width: 800px;
+  color: #333;
+  font-family: helvetica, arial, sans-serif;
+  font-size: 13px;
+}
+
 .App {
-  text-align: left;
-  height: 90vh;
-  display: flex;
+  border-radius: 2px;
+  display: flex; 
   flex-direction: column;
-  width: 90vw;
   border: 1px solid #ccc;
   margin: 25px;
   padding: 25px;
 }
 
 .section img {
-  padding-top: 25px;
+  padding-bottom: 20px;
+  margin-left: 49px;
 }
 
 #logo h1 {
@@ -21,8 +31,14 @@
 #ejemplo {
   display: block;
   color: #555;
-  font-size: 11px;
-  margin-bottom: 10px;
+  font-size: 12px;
+  margin: 10px;
+}
+
+#search-input {
+  color: #333;
+  border-radius: 2px;
+  border: 1px solid #ccc;
 }
 
 .sugerencia {
@@ -42,7 +58,7 @@
 .sugerencia .clase {
   display: block;
   font-size: 0.9em;
-  color: #a6a6a6;
+  color: #69a128;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -56,4 +72,33 @@
   max-width: calc(100vw - 70px);
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+#footer {
+  border-top: 1px solid #ccc;
+  font-size: x-small;
+  text-align: center;
+  margin-top: 20px;
+  padding-bottom: 5px;
+}
+
+.options p {
+  font-style: italic;
+  display: block;
+  margin: 10px 20px;
+  color: #555;
+  font-size: 12px;
+  padding-bottom: 10px;
+}
+
+.options {
+  border-radius: 2px;
+  border: 1px solid #ccc;
+}
+
+.options input {
+  color: #333;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  width: 45px;
 }
