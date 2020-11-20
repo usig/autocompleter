@@ -50,13 +50,13 @@ class App extends Component {
       this.setState({
         [e.target.name]: e.target.checked
       });
-      this.prueba();
+      this.UpdateComponenAutoCompleter();
     }else{
       this.state[e.target.name] = e.target.value;
       this.setState({
         [e.target.name]: e.target.value
       });
-      this.prueba();
+      this.UpdateComponenAutoCompleter();
     }
   }
 
@@ -88,7 +88,7 @@ class App extends Component {
     }
   };
 
-  async prueba () {
+  async UpdateComponenAutoCompleter () {
 
     const  options = { 
       maxSuggestions: this.state.maxSugg,
@@ -140,7 +140,7 @@ class App extends Component {
   }
 
   componentDidMount() { // esto se ejecuta una vez al cargar el componente, deberias usar ShouldComponentUpdate
-    // this.prueba();
+    // this.UpdateComponenAutoCompleter();
     // Opciones de config del autocomplete
     var options = { 
       maxSuggestions: this.state.maxSugg,
