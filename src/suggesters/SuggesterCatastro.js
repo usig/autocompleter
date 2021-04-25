@@ -28,7 +28,7 @@ const defaults = {
 };
 
 function mkRequest(data) {
-  return fetch(`https://epok.buenosaires.gob.ar/catastro/smp/${data}`).then(resp => resp.json());
+  return fetch(`https://epok.buenosaires.gob.ar/catastro/smp/${data}?srid=4326`).then(resp => resp.json());
 }
 
 export default class SuggesterCatastro extends Suggester {
@@ -59,7 +59,9 @@ export default class SuggesterCatastro extends Suggester {
           }
           return {
             suggesterName: this.name,
-            data: d
+            data: d,
+						title: d.smp,
+						type: 'LUGAR'
           };
         });
         callback(results, text, this.name);
