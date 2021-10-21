@@ -42,6 +42,7 @@
     "url": "https://github.com/usig/autocompleter"
   },
   "dependencies": {
+    "@usig-gcba/autocompleter": "^2.1.5",
     "@usig-gcba/normalizador": "1.1.12",
     "chalk": "^3.0.0",
     "isomorphic-fetch": "^2.2.1",

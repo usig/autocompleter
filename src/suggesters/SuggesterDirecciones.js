@@ -52,7 +52,7 @@ export default class SuggesterDirecciones extends Suggester {
   // agregue la localidad a la búsqueda o no.
   async getLatLng2(lugar) {
     let response = await fetch(
-      `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre}&geocodificar=true&srid=4326`
+      `${usig_webservice_url}/normalizar/?direccion=${lugar.nombre},${lugar.descripcion}&geocodificar=true&srid=4326`
     );
     if (response.status === 200) {
       let json = await response.json();
@@ -83,7 +83,7 @@ export default class SuggesterDirecciones extends Suggester {
     try {
       let dirs = this.options.normalizadorDirecciones.normalizar(text, maxSug);
       dirs = dirs.map((d) => {
-        d.descripcion = 'Ciudad Autónoma de Buenos Aires';
+        d.descripcion = 'CABA';
         const suggestion = {
           title: d.nombre,
           subTitle: d.descripcion,
@@ -125,7 +125,7 @@ export default class SuggesterDirecciones extends Suggester {
           if (opciones !== false) {
             let dirs = [opciones.match];
             dirs.map((d) => {
-              d.descripcion = 'Ciudad Autónoma de Buenos Aires';
+              d.descripcion = 'CABA';
               return {
                 title: d.name,
                 subTitle: d.descripcion,

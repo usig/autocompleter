@@ -299,7 +299,7 @@ class Autocompleter {
   updateCoordenadas(suggestions){
     if(suggestions.suggesterName === 'Direcciones'){
       let response = fetch(
-        `${usig_webservice_url}/normalizar/?direccion=${suggestions.data.nombre}&geocodificar=true&srid=4326`
+        `${usig_webservice_url}/normalizar/?direccion=${suggestions.data.nombre},${suggestions.data.descripcion}&geocodificar=true&srid=4326`
       ).then(r => r.json()).then(r => {
         if (
           r['direccionesNormalizadas'] &&
